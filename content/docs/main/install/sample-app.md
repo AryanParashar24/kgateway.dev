@@ -1,6 +1,6 @@
 ---
 title: Sample HTTP app
-weight: 7
+weight: 40
 description: Deploy httpbin as a sample app.
 ---
 
@@ -20,7 +20,7 @@ flowchart LR
 
 ## Before you begin
 
-Set up {{< reuse "/docs/snippets/kgateway.md" >}} by following the [Quick start](../../quickstart/) or [Installation](../install/) guides.
+Set up {{< reuse "/docs/snippets/kgateway.md" >}} by following the [Quick start](../../quickstart/) or [Installation]({{< link-hextra path="/install" >}}) guides.
 
 ## Deploy a sample app {#deploy-app}
 
@@ -90,7 +90,7 @@ Create an API gateway with an HTTP listener by using the {{< reuse "docs/snippet
      name: http
      namespace: {{< reuse "docs/snippets/namespace.md" >}}
    spec:
-     gatewayClassName: agentgateway
+     gatewayClassName: {{< reuse "docs/snippets/agw-gatewayclass.md" >}}
      listeners:
      - protocol: HTTP
        port: 8080
