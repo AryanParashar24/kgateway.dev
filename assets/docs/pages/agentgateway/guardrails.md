@@ -88,16 +88,18 @@ To optimize guardrail webhook performance, you can update the {{< reuse "docs/sn
 
 Example configuration file:
 
+{{< version include-if="2.1.x" >}}
+
 ```yaml
 kubectl apply -f- <<EOF
-apiVersion: {{< reuse "docs/snippets/trafficpolicy-apiversion.md" >}}
+apiVersion: {{< reuse "docs/snippets/gatewayparam-apiversion.md" >}}
 kind: {{< reuse "docs/snippets/gatewayparameters.md" >}}
 metadata:
-  name: gloo-gateway-override
+  name: agw-override
   namespace: {{< reuse "docs/snippets/namespace.md" >}}
 spec:
   kube:
-    aiExtension:
+    agentgateway:
       enabled: true
       env:
       - name: GUARDRAIL_WEBHOOK_MAX_CONNECTIONS
@@ -106,6 +108,27 @@ spec:
         value: "60"
 EOF
 ```
+
+{{< /version >}}
+{{< version include-if="2.2.x" >}}
+
+```yaml
+kubectl apply -f- <<EOF
+apiVersion: {{< reuse "docs/snippets/gatewayparam-apiversion.md" >}}
+kind: {{< reuse "docs/snippets/gatewayparameters.md" >}}
+metadata:
+  name: agw-override
+  namespace: {{< reuse "docs/snippets/namespace.md" >}}
+spec:
+  env:
+  - name: GUARDRAIL_WEBHOOK_MAX_CONNECTIONS
+    value: "50"
+  - name: GUARDRAIL_WEBHOOK_KEEPALIVE_SECONDS
+    value: "60"
+EOF
+```
+
+{{< /version >}}
 
 ### More information
 
@@ -217,9 +240,12 @@ The webhook server is configured to take the following actions:
    {{% /tab %}}
    {{< /tabs >}}
 
+
 ### Step 2: Configure the gateway proxy to use the webhook server {#ai-gateway}
 
 Configure a {{< reuse "docs/snippets/trafficpolicy.md" >}} to use the webhook server for prompt guarding.
+
+{{< version include-if="2.1.x" >}}
 
 ```yaml
 kubectl apply -f - <<EOF
@@ -255,6 +281,49 @@ EOF
 | `targetRefs` | The HTTPRoute that you want to apply the guardrail to. This example uses the `openai` HTTPRoute that you created before you began. |
 | `ai.promptGuard` | The AI prompt guarding configuration that you want to set up. In this example, you configure the webhook server for both request and response guardrails. |
 | `webhook.host` and `.port` | The host address and port number of the webhook server. For this example, you use the LoadBalancer service address as the webhook server address. If the webhook service is deployed in the same cluster as the gateway proxy, you can also use the Kubernetes DNS name of the service, such as `ai-guardrail-webhook.{{< reuse "docs/snippets/namespace.md" >}}.svc.cluster.local`. The example webhook server is configured to use port 8000. |
+
+{{< /version >}}
+{{< version include-if="2.2.x" >}}
+
+```yaml
+kubectl apply -f - <<EOF
+apiVersion: {{< reuse "docs/snippets/trafficpolicy-apiversion.md" >}}
+kind: {{< reuse "docs/snippets/trafficpolicy.md" >}}
+metadata:
+  name: openai-prompt-guard
+  namespace: {{< reuse "docs/snippets/namespace.md" >}}
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: openai
+  backend:
+    ai:
+      promptGuard:
+        request:
+        - webhook:
+            backendRef: 
+              kind: Service
+              name: ai-guardrail-webhook
+              port: 8000
+        response:
+        - webhook:
+            backendRef: 
+              kind: Service
+              name: ai-guardrail-webhook
+              port: 8000
+EOF
+```
+
+{{% reuse "docs/snippets/review-table.md" %}} For more prompt guard options such as custom responses, see the {{< reuse "docs/snippets/trafficpolicy.md" >}} API docs for AI.
+
+| Setting | Description |
+|---------|-------------|
+| `targetRefs` | The HTTPRoute that you want to apply the guardrail to. This example uses the `openai` HTTPRoute that you created before you began. |
+| `backend.ai.promptGuard` | The AI prompt guarding configuration that you want to set up. In this example, you configure the webhook server for both request and response guardrails. |
+| `webhook.backendRef` | The reference to the webhook server service. The example webhook server is configured to use port 8000. |
+
+{{< /version >}}
 
 
 ### Step 3: Test the webhook server {#test-webhook-server}
@@ -404,6 +473,6 @@ EOF
 2. Delete the {{< reuse "docs/snippets/trafficpolicy.md" >}}.
 
    ```sh
-   kubectl delete {{< reuse "docs/snippets/trafficpolicy.md" >}} -n {{< reuse "docs/snippets/namespace.md" >}} openai-opt
+   kubectl delete {{< reuse "docs/snippets/trafficpolicy.md" >}} -n {{< reuse "docs/snippets/namespace.md" >}} openai-prompt-guard
    ```
 

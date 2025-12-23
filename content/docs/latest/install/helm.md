@@ -54,7 +54,7 @@ Install {{< reuse "/docs/snippets/kgateway.md" >}} by using Helm.
 
       ```sh
       helm pull oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} --version {{< reuse "docs/versions/helm-version-flag.md" >}}
-      tar -xvf {{< reuse "/docs/snippets/helm-kgateway.md" >}}-v{{< reuse "docs/versions/n-patch.md" >}}.tgz
+      tar -xvf {{< reuse "/docs/snippets/helm-kgateway.md" >}}-{{< reuse "docs/versions/helm-version-flag.md" >}}.tgz
       open {{< reuse "/docs/snippets/helm-kgateway.md" >}}/values.yaml
       ```
       
@@ -87,7 +87,7 @@ helm upgrade -i -n {{< reuse "docs/snippets/namespace.md" >}} {{< reuse "/docs/s
 ```sh
 helm upgrade -i -n {{< reuse "docs/snippets/namespace.md" >}} {{< reuse "/docs/snippets/helm-kgateway.md" >}} oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} \
      --set gateway.aiExtension.enabled=true \
-     --set agentGateway.enabled=true \
+     --set agentgateway.enabled=true \
      --version {{< reuse "docs/versions/helm-version-upgrade.md" >}}
 ```
 {{% /tab %}}

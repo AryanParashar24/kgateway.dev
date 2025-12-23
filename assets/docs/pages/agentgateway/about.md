@@ -1,4 +1,4 @@
-[Agentgateway](https://agentgateway.dev/) is an open source, highly available, highly scalable, and enterprise-grade data plane that provides AI connectivity for agents and tools in any environment. You can use {{< reuse "/docs/snippets/kgateway.md" >}} as the control plane to quickly spin up and manage the lifecycle of agentgateway proxies in Kubernetes environments. The control plane translates Kubernetes Gateway API and {{< reuse "/docs/snippets/kgateway.md" >}} custom resources into proxy configuration for the agentgateway data plane.
+{{< reuse "docs/snippets/agentgateway/about.md" >}}
 
 Agentgateway supports many agent connectivity use cases, including the following:
 
@@ -12,7 +12,7 @@ Agentgateway supports many agent connectivity use cases, including the following
 
 For more information about how kgateway integrates with agentgateway, see the [Architecture](../../about/architecture/) topic.
 
-For more information about agentgateway resources, see the [Agentgateway docs](https://agentgateway.dev/docs/about/).
+For more information about agentgateway resources, see the [Agentgateway upstream docs](https://agentgateway.dev/docs/about/).
 
 ## Agentgateway resource configuration {#resources}
 
@@ -28,15 +28,17 @@ Review the following table to understand how to configure agentgateway resources
 | Target | The details of the backend, such as the tools in an MCP backend. | Services and Backends. |
 | Policies | Policies for how agentgateway processes incoming requests.<ul><li>Request Header Modifier: Add, set, or remove HTTP request headers.</li><li>Response Header Modifier: Add, set, or remove HTTP response headers.</li><li>Request Redirect: Redirect incoming requests to a different scheme, authority, path, or status code.</li><li>URL Rewrite: Rewrite the authority or path of requests before forwarding.</li><li>Request Mirror: Mirror a percentage of requests to an additional backend for testing or analysis.</li><li>CORS: Configure Cross-Origin Resource Sharing (CORS) settings for allowed origins, headers, methods, and credentials.</li><li>A2A: Enable agent-to-agent (A2A) communication features.</li><li>Backend Auth: Set up authentication for backend services such as passthrough, key, GCP, AWS, and so on.</li><li>Timeout: Set request and backend timeouts.</li><li>Retry: Configure retry attempts, backoff, and which response codes should trigger retries.</li></ul> | Policies in HTTPRoutes and Backends. |
 
+{{< version include-if="2.1.x" >}}
+
 ## Feature enablement
 
 To use agentgateway features, you must enable the agentgateway feature in {{< reuse "docs/snippets/kgateway.md" >}}. Additionally, to route to AI providers, enable the AI Gateway feature alongside AI gateway.
 
-1. Upgrade or install {{< reuse "/docs/snippets/kgateway.md" >}} with the agentgateway and AI Gateway feature enabled. 
+1. Upgrade or install the {{< reuse "/docs/snippets/kgateway.md" >}} control plane to enable the agentgateway data plane. 
 
    ```shell
    helm upgrade -i -n {{< reuse "docs/snippets/namespace.md" >}} {{< reuse "/docs/snippets/helm-kgateway.md" >}} oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} \
-     --set agentGateway.enabled=true \
+     --set agentgateway.enabled=true \
      --version {{< reuse "docs/versions/helm-version-upgrade.md" >}}
    ```
 
@@ -58,6 +60,8 @@ To use agentgateway features, you must enable the agentgateway feature in {{< re
    * [MCP connectivity]({{< link-hextra path="/agentgateway/mcp/" >}})
    * [Agent connectivity]({{< link-hextra path="/agentgateway/agent/" >}})
 
+{{< /version >}}
+<!--
 ## More considerations
 
 Review the following considerations for using agentgateway.
@@ -68,4 +72,6 @@ Review the following considerations for using agentgateway.
 - Configuring your agentgateway proxy as a Dynamic Forward Proxy (DFP) is currently not supported.
 - [Header modifier filters](../../traffic-management/header-control/) in {{< reuse "docs/snippets/trafficpolicy.md" >}} are not supported for agentgateway proxies. You can still use header modifier filters in the Gateway API-native HTTPRoutes.
 - Retries and timeouts cannot be configured on an agentgateway proxy.
-- In transformation policies, response-based transformations are not supported. Also note that the `parseAs` field is not supported, but you can use the `json()` function directly in CEL expressions instead.<!--TODO agentgateway response transformations-->
+- In transformation policies, response-based transformations are not supported. Also note that the `parseAs` field is not supported, but you can use the `json()` function directly in CEL expressions instead
+
+-->

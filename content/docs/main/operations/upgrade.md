@@ -162,20 +162,29 @@ For Istio upgrades, consult the docs based on the way that you installed Istio. 
       open values.yaml
       ```
 
-   2. Compare your current Helm chart values with the version that you want to upgrade to. You can get a `{{< reuse "/docs/snippets/helm-kgateway.md" >}}/values.yaml` file for the upgrade version by pulling and inspecting the Helm chart locally.
+   2. Compare your current Helm chart values with the version that you want to upgrade to. 
+   
+      * **Show all values**: 
       
-      ```sh
-      helm pull oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} --version {{< reuse "docs/versions/helm-version-upgrade.md" >}}
-      tar -xvf {{< reuse "/docs/snippets/helm-kgateway.md" >}}-{{< reuse "docs/versions/helm-version-upgrade.md" >}}.tgz
-      open {{< reuse "/docs/snippets/helm-kgateway.md" >}}/values.yaml
-      ```
+        ```sh
+        helm show values oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} --version {{< reuse "docs/versions/helm-version-upgrade.md" >}}
+        ```
+
+      * **Get a file with all values**: You can get a `{{< reuse "/docs/snippets/helm-kgateway.md" >}}/values.yaml` file for the upgrade version by pulling and inspecting the Helm chart locally.
+      
+        ```sh
+        helm pull oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} --version {{< reuse "docs/versions/helm-version-upgrade.md" >}}
+        tar -xvf {{< reuse "/docs/snippets/helm-kgateway.md" >}}-{{< reuse "docs/versions/helm-version-upgrade.md" >}}.tgz
+        open {{< reuse "/docs/snippets/helm-kgateway.md" >}}/values.yaml
+        ```
 
    3. Make any changes that you want by editing your `values.yaml` Helm values file or preparing the `--set` flags. For development v{{< reuse "docs/versions/patch-dev.md" >}} builds, include the `controller.image.pullPolicy=Always` setting or refer to the exact image digest to avoid using cached images.
 
 4. Upgrade the kgateway Helm installation.
    * Make sure to include your Helm values when you upgrade either as a configuration file or with `--set` flags. Otherwise, any previous custom values that you set might be overwritten.
    * When using the development build v{{< reuse "docs/versions/patch-dev.md" >}}, add the `--set controller.image.pullPolicy=Always` option to ensure you get the latest image. Alternatively, you can specify the exact image digest.
-   
+   * To use experimental Gateway API features, include the experimental feature gate, `--set controller.extraEnv.KGW_ENABLE_GATEWAY_API_EXPERIMENTAL_FEATURES=true`.
+
    ```sh
    helm upgrade -i -n {{< reuse "docs/snippets/namespace.md" >}} {{< reuse "/docs/snippets/helm-kgateway.md" >}} oci://{{< reuse "/docs/snippets/helm-path.md" >}}/charts/{{< reuse "/docs/snippets/helm-kgateway.md" >}} \
      -f values.yaml \
