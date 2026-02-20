@@ -9,4 +9,5 @@ Integrate kgateway with an Istio service mesh.
 {{< cards >}}
   {{< card link="ambient" title="Ambient" >}}
   {{< card link="sidecar" title="Sidecar" >}}
+  {{< card link="gamma-support" title="GAMMA Support">}}
 {{< /cards >}}
