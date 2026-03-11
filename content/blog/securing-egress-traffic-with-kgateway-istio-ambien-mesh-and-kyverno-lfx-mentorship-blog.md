@@ -220,7 +220,7 @@ spec:
 EOF
 ```
 
-The TrafficPolicy above does more than just hook up ExtAuth:
+The TrafficPolicy above does more than just hook up ExtAuth. It also adds the following policies:
 
 - **Retries & timeouts** guarantee that kgateway will automatically re-attempt authorization calls if Kyverno is slow or briefly unavailable, instead of immediately failing user traffic.
 - **Fail-open vs fail-closed:** The GatewayExtension controls this stance. In regulated environments we typically fail closed (default), but for low-risk demos we can set `failOpen: true` so traffic continues if Kyverno is down, keeping user flows alive while logging the gap.
