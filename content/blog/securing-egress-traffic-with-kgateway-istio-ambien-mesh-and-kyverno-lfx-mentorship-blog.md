@@ -280,7 +280,7 @@ Here’s what this means operationally:
 
 # Kyverno Configuration Policy/ Configuration Governance
 
-Runtime enforcement alone is not enough in real enterprises. Platform or security teams usually require an approval workflow before new egress endpoints are allowed. The ClusterPolicy below models that review step: every ServiceEntry must carry the `security.corp/egress-approved: "true"` label, signalling that an administrator verified the destination and its data-sharing risk.
+Runtime enforcement alone is not enough in real enterprises. Platform or security teams usually require an approval workflow before new egress endpoints are allowed. The following ClusterPolicy models that review step: every ServiceEntry must carry the `security.corp/egress-approved: "true"` label, signaling that an administrator verified the destination and its data-sharing risk.
 
 In a corporate process this label might be set only after a Jira ticket is approved or a risk assessment is completed. Without it, developers cannot onboard shadow endpoints, and Kyverno blocks the object at admission time.
 
