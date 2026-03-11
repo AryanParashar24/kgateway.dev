@@ -245,7 +245,7 @@ spec:
 EOF
 ```
 
-In production you would tune `failOpen` per criticality: customer-facing payment traffic may prefer `false`, whereas internal experimentation clusters might temporarily set it to `true` during policy rollouts.
+In production you would tune `failOpen` per criticality: customer-facing payment traffic might prefer `false`, whereas internal experimentation clusters might temporarily set it to `true` during policy rollouts.
 
 ## Authorization rules for Ollama traffic
 
