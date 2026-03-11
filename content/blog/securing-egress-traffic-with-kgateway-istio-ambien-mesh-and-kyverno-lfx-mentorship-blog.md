@@ -249,7 +249,7 @@ In production you would tune `failOpen` per criticality: customer-facing payment
 
 ## Authorization rules for Ollama traffic
 
-With traffic flowing through ExtAuth we now define the actual rules Kyverno must evaluate. For this tutorial we require a positive confirmation header before any prompt reaches the external model. The Envoy AuthorizationPolicy below expresses that business rule using CEL expressions:
+With traffic flowing through ExtAuth now, you can define the actual rules Kyverno must evaluate. For this tutorial, set up a positive confirmation header before any prompt reaches the external model. The following Envoy AuthorizationPolicy expresses that business rule using CEL expressions:
 
 ```YAML
 kubectl apply -f - <<EOF
