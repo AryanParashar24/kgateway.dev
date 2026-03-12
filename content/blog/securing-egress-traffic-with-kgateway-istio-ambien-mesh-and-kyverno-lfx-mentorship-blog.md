@@ -1,4 +1,3 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/dd2237d9-66e9-48d0-8c2d-4f9f0f013772" />---
 title: "Securing Egress Traffic with kgateway, Istio Ambient Mesh, and Kyverno: LFX Mentorship Blog" 
 toc: 
 publishDate: 2026-03-11T00:00:00-00:00
