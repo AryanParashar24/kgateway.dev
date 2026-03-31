@@ -12,7 +12,14 @@
    kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
    ```
 
-2. Change the config map for the Argo Rollouts pod to install the Argo Rollouts Gateway API plug-in as shown in the following example. Alternatively, you could install the Argo Rollouts Helm chart instead to use init containers to achieve the same thing. For more information about either method, refer to the [Argo Rollouts docs](https://rollouts-plugin-trafficrouter-gatewayapi.readthedocs.io/en/v0.8.0/installation/).
+2. Change the config map for the Argo Rollouts pod to install the Argo Rollouts Gateway API plug-in as shown in the following example. Alternatively, you could install the Argo Rollouts Helm chart instead to use init containers to achieve the same thing. For more information about either method, refer to the [Argo Rollouts docs](https://rollouts-plugin-trafficrouter-gatewayapi.readthedocs.io/en/v0.11.0/installation/).
+
+   {{< callout type="info" >}}
+   This configuration is only an example. Ensure you use the correct plugin binary for your platform, such as amd64 or arm64. For more platform and version options, refer to the [releases of the Argo rollouts traffic router plugin for the Gateway API](https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases).
+   {{< /callout >}}
+
+   {{< tabs items="Linux amd64, Linux arm64" tabTotal="2" >}}
+   {{% tab tabName="Linux amd64" %}}
    ```yaml
    cat <<EOF | kubectl apply -f -
    apiVersion: v1
@@ -23,12 +30,32 @@
    data:
      trafficRouterPlugins: |-
        - name: "argoproj-labs/gatewayAPI"
-	     # example uses amd64 and v0.8.0
+	     # example uses amd64 and v0.11.0
 	     # for other builds and versions,
-		 # see https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases
-         location: "https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases/download/v0.8.0/gatewayapi-plugin-amd64"
+	     # see https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases
+         location: "https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases/download/v0.11.0/gatewayapi-plugin-amd64"
    EOF
    ```
+   {{% /tab %}}
+   {{% tab tabName="Linux arm64" %}}
+   ```yaml
+   cat <<EOF | kubectl apply -f -
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: argo-rollouts-config
+     namespace: argo-rollouts
+   data:
+     trafficRouterPlugins: |-
+       - name: "argoproj-labs/gatewayAPI"
+	     # example uses arm64 and v0.11.0
+	     # for other builds and versions,
+	     # see https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases
+         location: "https://github.com/argoproj-labs/rollouts-plugin-trafficrouter-gatewayapi/releases/download/v0.11.0/gatewayapi-plugin-linux-arm64"
+   EOF
+   ```
+   {{% /tab %}}
+   {{< /tabs >}}
 
 3. Restart the Argo Rollouts pod to pick up the latest configuration changes. 
    ```sh
@@ -208,6 +235,8 @@
       <div class='pod' style='background:#44B3C2'> ver: 1.0
       </div>%
       ```
+      {{< reuse-image src="img/test-application-ver1.png" >}}
+      {{< reuse-image-dark srcDark="img/test-application-ver1.png" >}}
    {{% /tab %}}
    {{% tab  %}}
    3. Port-forward the `http` pod on port 8080. 
@@ -225,7 +254,8 @@
       <div class='pod' style='background:#44B3C2'> ver: 1.0
       </div>%
       ```
-
+      {{< reuse-image src="img/test-application-ver1.png" >}}
+      {{< reuse-image-dark srcDark="img/test-application-ver1.png" >}}
    {{% /tab %}}
    {{< /tabs >}}
 
@@ -260,6 +290,10 @@
    </div><div class='pod' style='background:#F1A94E'> ver: 2.0
    </div><div class='pod' style='background:#F1A94E'> ver: 2.0
    ```
+   {{< reuse-image src="img/test-application-ver2.png" >}}
+   {{< reuse-image-dark srcDark="img/test-application-ver2.png" >}}
+   {{< reuse-image src="img/test-application-ver1.png" >}}
+   {{< reuse-image-dark srcDark="img/test-application-ver1.png" >}}
    {{% /tab %}}
    {{% tab  %}}
    ```sh
@@ -283,6 +317,10 @@
    </div><div class='pod' style='background:#F1A94E'> ver: 2.0
    </div><div class='pod' style='background:#F1A94E'> ver: 2.0
    ```
+   {{< reuse-image src="img/test-application-ver2.png" >}}
+   {{< reuse-image-dark srcDark="img/test-application-ver2.png" >}}
+   {{< reuse-image src="img/test-application-ver1.png" >}}
+   {{< reuse-image-dark srcDark="img/test-application-ver1.png" >}}
    {{% /tab %}}
    {{< /tabs >}}
 

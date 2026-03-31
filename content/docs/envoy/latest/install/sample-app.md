@@ -58,7 +58,7 @@ The following configuration file creates the httpbin app. To review the source f
 
 Create an API gateway with an HTTP listener by using the {{< reuse "docs/snippets/k8s-gateway-api-name.md" >}}.
 
-1. Create a Gateway resource and configure an HTTP listener. The following Gateway can serve HTTPRoute resources from all namespaces. For more information about which GatewayClass to use, see [About gateway proxies](../../about/proxies/).
+1. Create a Gateway resource and configure an HTTP listener. The following Gateway can serve HTTPRoute resources from all namespaces.
    
    ```yaml
    kubectl apply -f- <<EOF
@@ -102,7 +102,7 @@ Create an API gateway with an HTTP listener by using the {{< reuse "docs/snippet
    
    ```txt
    NAME                  READY   STATUS    RESTARTS   AGE
-   http-7dd94b74-k26j6   3/3     Running   0          18s
+   http-7dd94b74-k26j6   1/1     Running   0          18s
    ```
 
    {{< callout type="info" >}}
